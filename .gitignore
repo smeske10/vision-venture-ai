@@ -1,0 +1,63 @@
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build directories
+dist/
+build/
+out/
+dist-ssr
+*.local
+
+# Static cache
+.cache/
+
+# IDE or editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Supabase migrations
+supabase/migrations/
+
+# Temporary or system files
+.DS_Store
+Thumbs.db
+
+# Package lock files (optional, if you want to ignore these)
+package-lock.json
+yarn.lock
+
+# TypeScript build artifacts
+*.tsbuildinfo
+
+# Vite-related files
+.vite/
+.vitepress/
+.vite-env.d.ts
+
+# Bolt files (if you want to keep them local)
+.bolt/
