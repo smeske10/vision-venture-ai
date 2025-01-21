@@ -35,7 +35,6 @@ dist-ssr
 .cache/
 
 # IDE or editor-specific files
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -46,10 +45,6 @@ supabase/migrations/
 # Temporary or system files
 .DS_Store
 Thumbs.db
-
-# Package lock files (optional, if you want to ignore these)
-package-lock.json
-yarn.lock
 
 # TypeScript build artifacts
 *.tsbuildinfo
