@@ -49,6 +49,10 @@ function LandingPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    document.title = "Vision Venture AI"; // Change tab text
+  }, []);
+
+  useEffect(() => {
     // Check if there's a saved redirect path
     const savedRedirect = sessionStorage.getItem('redirectTo');
     if (savedRedirect) {
