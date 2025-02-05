@@ -4,6 +4,7 @@ import { Calendar, Users, Globe2, CheckCircle2, ArrowLeft, Loader2, AlertCircle 
 import { supabase } from '../lib/supabase';
 import { WorkshopRegistration } from './WorkshopRegistration';
 import { Navbar } from './Navbar';
+import { AuthModal } from './AuthModal';
 
 interface Workshop {
   id: string;
@@ -26,6 +27,7 @@ interface Workshop {
 export function WorkshopDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ export function WorkshopDetails() {
   if (loading) {
     return (
       <>
-        <Navbar onOpenAuth={() => setShowRegistration(true)} />
+        <Navbar onOpenAuth={() => setShowAuthModal(true)} />
         <div className="min-h-screen bg-gray-50 pt-16 flex items-center justify-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
         </div>
@@ -70,7 +72,7 @@ export function WorkshopDetails() {
   if (error || !workshop) {
     return (
       <>
-        <Navbar onOpenAuth={() => setShowRegistration(true)} />
+        <Navbar onOpenAuth={() => setShowAuthModal(true)} />
         <div className="min-h-screen bg-gray-50 pt-16 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -91,7 +93,7 @@ export function WorkshopDetails() {
 
   return (
     <>
-      <Navbar onOpenAuth={() => setShowRegistration(true)} />
+      <Navbar onOpenAuth={() => setShowAuthModal(true)} />
       <div className="min-h-screen bg-gray-50 pt-16">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
@@ -210,6 +212,10 @@ export function WorkshopDetails() {
           onClose={() => setShowRegistration(false)}
         />
       )}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   );
 }

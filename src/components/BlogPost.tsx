@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { User, Calendar, Clock, Download, ArrowLeft, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Navbar } from './Navbar';
+import { AuthModal } from './AuthModal';
 
 interface BlogPost {
   id: string;
@@ -154,6 +155,10 @@ export function BlogPost() {
           </div>
         </article>
       </div>
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   );
 }

@@ -24,12 +24,11 @@ export function UserManagement() {
 
   async function fetchUsers() {
     try {
-      // Query the private.users view
-      const { data: users, error: usersError } = await supabase
-        .from('private.users')
-        .select('*');
-
+      // Use Supabase RPC to fetch users securely
+      const { data: users, error: usersError } = await supabase.rpc('get_users');
+  
       if (usersError) throw usersError;
+  
       setUsers(users || []);
     } catch (err: any) {
       setError(err.message);
@@ -37,7 +36,7 @@ export function UserManagement() {
       setLoading(false);
     }
   }
-
+  
   const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );

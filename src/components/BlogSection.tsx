@@ -4,6 +4,7 @@ import { Clock, User, ArrowRight, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
+import { AuthModal } from './AuthModal';
 
 interface BlogPost {
   id: string;
@@ -148,6 +149,10 @@ export function BlogSection() {
         </div>
       </section>
       {isFullPage && <Footer />}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   );
 }

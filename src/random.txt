@@ -1,3 +1,37 @@
+ProtectedRoute.tsx
+
+import React, { useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    // Save the attempted URL
+    sessionStorage.setItem('redirectTo', location.pathname);
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+
+APP.tsx
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -24,12 +58,7 @@ import { ModuleManagement } from './components/AdminDashboard/ModuleManagement';
 import { WorkshopManagement } from './components/AdminDashboard/WorkshopManagement';
 import { UserManagement } from './components/AdminDashboard/UserManagement';
 import { Settings } from './components/AdminDashboard/Settings';
-import { Workshops } from './components/Workshops';
-import { PrivacyPolicy } from './components/PrivacyPolicy';
-import { TermsOfService } from './components/TermsOfService';
-import { CookiePolicy } from './components/CookiePolicy';
-import { ScrollToTop } from './components/ScrollToTop';
-import { CookieConsent } from './components/CookieConsent';
+import { Workshops } from './components/Workshops'
 
 interface Workshop {
   id: string;
@@ -86,41 +115,21 @@ function LandingPage() {
       <Navbar onOpenAuth={() => setIsAuthModalOpen(true)} />
 
       {/* Hero Section */}
-      <header className="relative w-full min-h-[80vh] flex items-center">
-        {/* Full-width background image */}
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{
-            backgroundImage: "url('/ai-hero.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Overlay gradient for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
-
-        {/* Content container */}
-        <div className="container mx-auto px-6 relative z-10">
-          {/* Text content (2/3 width) */}
-          <div className="w-2/3">
-            <div className="max-w-2xl">
-              <h1 className="text-6xl font-bold mb-6">
-                Transform Your Business with AI
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Expert-led workshops and training to help your team master AI implementation
-                and drive innovation.
-              </p>
-              <button
-                onClick={() => setIsAuthModalOpen(true)}
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Get Started
-              </button>
-            </div>
-          </div>
+      <header className="container mx-auto px-6 py-16 min-h-[80vh] flex items-center">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-5xl font-bold mb-6 py-10">
+            Transform Your Business with AI
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Expert-led workshops and training to help your team master AI implementation
+            and drive innovation.
+          </p>
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Get Started
+          </button>
         </div>
       </header>
 
@@ -194,7 +203,6 @@ function App() {
   return (
     <AnalyticsProvider>
       <Router>
-        <ScrollToTop />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
@@ -217,15 +225,12 @@ function App() {
             }
           />
           <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/cookies" element={<CookiePolicy />} />
           
           {/* Admin Routes */}
           <Route
-            path="/admin/*"
+            path="/admin"
             element={
-              <ProtectedRoute requireAdmin={true}>
+              <ProtectedRoute>
                 <AdminLayout />
               </ProtectedRoute>
             }
@@ -240,7 +245,6 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <CookieConsent />
       </Router>
     </AnalyticsProvider>
   );

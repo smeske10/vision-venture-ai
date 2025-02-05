@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,16 @@ export function AuthModal({ isOpen, onClose, redirectTo }: AuthModalProps) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen) {
+      // Reset form state when modal closes
+      setEmail('');
+      setPassword('');
+      setError('');
+      setIsSignUp(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -46,7 +56,13 @@ export function AuthModal({ isOpen, onClose, redirectTo }: AuthModalProps) {
       }
 
       onClose();
-      if (redirectTo) {
+      
+      // Check for saved redirect path first
+      const savedRedirect = sessionStorage.getItem('redirectTo');
+      if (savedRedirect) {
+        sessionStorage.removeItem('redirectTo');
+        navigate(savedRedirect);
+      } else if (redirectTo) {
         navigate(redirectTo);
       }
     } catch (err: any) {

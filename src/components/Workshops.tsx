@@ -4,6 +4,7 @@ import { Search, AlertCircle, Loader2 } from 'lucide-react';
 import { WorkshopCard } from './WorkshopCard';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
+import { AuthModal } from './AuthModal';
 
 interface Workshop {
   id: string;
@@ -112,6 +113,10 @@ export function Workshops() {
         </div>
       </div>
       <Footer />
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   );
 }
