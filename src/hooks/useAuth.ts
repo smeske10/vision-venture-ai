@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 
 export function useAuth() {
   const [user, setUser] = useState<any>(null);
@@ -9,22 +9,16 @@ export function useAuth() {
     const fetchUser = async () => {
       setLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user) {
-        setUser(session.user);
-        console.log("User authenticated:", session.user);
-      } else {
-        setUser(null);
-      }
-      
+
+      setUser(session?.user || null);
       setLoading(false);
     };
 
     fetchUser();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
       console.log("Auth state changed:", session?.user);
+      setUser(session?.user || null);
     });
 
     return () => {
@@ -32,8 +26,21 @@ export function useAuth() {
     };
   }, []);
 
-  return { user, loading };
+  async function signOut() {
+    console.log("Signing out...");
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error);
+    } else {
+      console.log("Sign out successful!");
+      setUser(null); // Ensure state updates
+      window.location.reload(); // Forces UI refresh
+    }
+  }
+
+  return { user, loading, signOut };
 }
+
 
 
 // import { useState, useEffect } from 'react';

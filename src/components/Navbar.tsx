@@ -40,14 +40,16 @@ export function Navbar({ onOpenAuth }: NavbarProps) {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
-      // Always navigate to home after sign out
-      navigate('/', { replace: true });
+      await signOut(); // Ensure signOut is awaited properly
       setOpenDropdown(null);
+  
+      // Manually clear the user state to force re-render
+      window.location.reload(); // This ensures UI updates correctly
     } catch (error) {
-      console.error('Error during sign out:', error);
+      console.error("Error during sign out:", error);
     }
   };
+  
 
   const toggleDropdown = (id: string) => {
     setOpenDropdown(openDropdown === id ? null : id);
